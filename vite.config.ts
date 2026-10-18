@@ -1,0 +1,6 @@
+import {defineConfig} from 'vite';
+import react from '@vitejs/plugin-react';
+import {VitePWA} from 'vite-plugin-pwa';
+const base=process.env.BASE_PATH||'/';
+if(!base.startsWith('/')||!base.endsWith('/'))throw new Error('BASE_PATH must start and end with /');
+export default defineConfig({base,define:{__BUILD_ID__:JSON.stringify(process.env.BUILD_ID||String(Date.now()))},plugins:[react(),VitePWA({strategies:'injectManifest',srcDir:'src',filename:'sw.ts',injectRegister:false,registerType:'prompt',includeAssets:['icon.svg','icon-192.png','icon-512.png','maskable-512.png','puzzles.json'],manifest:{name:'Crossword Garden · HSC Logic',short_name:'Crossword Garden',description:'150 little adventures in wordplay. Play anywhere, even offline.',theme_color:'#245f48',background_color:'#f8f7f2',display:'standalone',start_url:base,scope:base,id:base,icons:[{src:'icon-192.png',sizes:'192x192',type:'image/png'},{src:'icon-512.png',sizes:'512x512',type:'image/png',purpose:'any'},{src:'maskable-512.png',sizes:'512x512',type:'image/png',purpose:'maskable'}]},injectManifest:{globPatterns:['**/*.{js,css,html,json,svg,png,woff2,webmanifest}'],maximumFileSizeToCacheInBytes:5*1024*1024}})],build:{target:'es2022'}});
